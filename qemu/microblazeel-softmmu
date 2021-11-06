@@ -1,0 +1,6 @@
+microblaze-fdt,Microblaze device tree driven machine model
+microblaze-fdt-plnx,Microblaze device tree driven machine model for PetaLinux
+none,empty machine
+petalogix-ml605,PetaLogix linux refdesign for xilinx ml605 little endian
+petalogix-s3adsp1800,PetaLogix linux refdesign for xilinx Spartan 3ADSP1800 (default)
+xlnx-zynqmp-pmu,Xilinx ZynqMP PMU machine

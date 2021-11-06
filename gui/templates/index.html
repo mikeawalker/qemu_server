@@ -1,0 +1,98 @@
+{% extends 'bootstrap/base.html' %} {% import "bootstrap/wtf.html" as wtf %} {% block styles %}
+
+<style>
+    body {
+        background: #e8f1f9;
+    }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href='/static/main.css' />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> {% endblock %} {% block title %} Qemu Runner {% endblock %} {% block content %}
+
+
+
+<script src="/static/helpers.js"></script>
+
+<span class="checkbox-container">
+  <input class="checkbox-trigger" type="checkbox"  />
+  <span class="menu-content">
+      <ul>
+        <li><a href="/">QEMU</a></li>
+        <li><a href="/build">Processors</a></li>
+        <li><a href="/terminals">Active</a></li>
+        <li><a href="/status">Monitor</a></li>
+      </ul>
+    <span class="hamburger-menu"></span>
+</span>
+</span>
+
+
+
+
+<div class="container">
+    <div class="row">
+        <div class="col-md-10 col-lg-8 mx-lg-auto mx-md-auto">
+
+            <h1 class="pt-5 pb-2"> {{title}}</h1>
+
+            <p class="lead">Select your qemu control options </p>
+
+            <div>
+                {% for entry in database %}
+                <div class="rounded">
+
+                    <div class="panel-group">
+                        <div class="panel panel-default">
+                            <div class="panel-heading">
+                                <h4 class="panel-title">
+                                    <a data-toggle="collapse" href="#collapse{{loop.index}}">{{type}}: {{entry.name}}</a>
+                                </h4>
+                            </div>
+                            <div id="collapse{{loop.index}}" class="panel-collapse collapse">
+                                <div class="panel-body">
+                                    <table class="table table-hover">
+                                        {% for prop in entry.__dict__.items() %} {% if prop[0] != "_sa_instance_state" %}
+                                        <tr>
+                                            <td> {{ prop[0] }}</td>
+                                            <td> {{ prop[1] }} </td>
+                                        </tr>
+                                        {% endif %} {% endfor %}
+                                    </table>
+                                </div>
+                                <div class="panel-footer">
+                                    <div id="commandBox">
+                                        {{ entry.copyable }}
+                                    </div>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form method=post>
+                        <button type="remove" name="remove_button" value="{{entry.id}}" class="remove-button"><i class="fa fa-close"></i> </button>
+                    </form>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="rounded">
+                Add a new entry {{ wtf.quick_form(form) }}
+
+                <div class="container">
+
+                </div>
+
+
+            </div>
+
+
+        </div>
+
+    </div>
+</div>
+
+
+
+{% endblock %}
