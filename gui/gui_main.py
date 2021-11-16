@@ -1,8 +1,7 @@
 from flask import Flask, render_template, redirect, url_for, request, jsonify
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, SelectField, FormField, TextAreaField, BooleanField,FileField, FieldList, FormField
-from wtforms.fields.html5 import DecimalRangeField
+from wtforms import StringField, SubmitField, SelectField, FormField, TextAreaField, BooleanField,FileField, FieldList, FormField, IntegerField
 from wtforms.validators import DataRequired# App config.
 import os
 import server.qemu as QEMU
@@ -45,7 +44,7 @@ class NewProcessorForm(FlaskForm):
 
     name = StringField("Name",validators=[DataRequired()])
     executable = SelectField(label="select_exe" , choices=machine_dict.keys(), id='select_exe')
-    memory = DecimalRangeField(label="Memory", default=64,validators=[DataRequired()])
+    memory = IntegerField(label="Memory", default=64,validators=[DataRequired()])
     machine = SelectField(label="Machine Type" , choices=[] ,validators=[DataRequired()], id='select_machine')
     processor = SelectField(label='Processor selection', choices=ProcessorType,validators=[DataRequired()])
     dts = SelectField(label='DTS File', choices=QEMU.find_dts("work"),validators=[DataRequired()])
