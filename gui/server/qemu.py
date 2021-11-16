@@ -19,7 +19,7 @@ class qemu:
         commandGroup = []
         for run in qemuRuns:
             command = database_to_qemu( run )
-            command = ["timeout" , "20"]
+            #command = ["timeout" , "20"]
             print( "Starting")
             p = subprocess.Popen( command , stdout=subprocess.PIPE, shell=True)
             print( "Ending")
