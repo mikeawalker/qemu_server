@@ -23,7 +23,7 @@ COPY gui /home/gui
 
 RUN cd /home/ && pip3 install -r gui/requirements.txt
 # Expose the following ports for the GUI
-EXPOSE 5000
+EXPOSE 5000 
 
 # Setup a volume for user to locate binary files
 VOLUME /home/work
