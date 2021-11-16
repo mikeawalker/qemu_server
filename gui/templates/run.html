@@ -1,0 +1,57 @@
+{% extends 'bootstrap/base.html' %} {% import "bootstrap/wtf.html" as wtf %} {% block styles %}
+
+<style>
+    body {
+        background: #e8f1f9;
+    }
+</style>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href='/static/main.css' />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> {% endblock %} {% block title %} Qemu Runner {% endblock %} {% block content %}
+
+
+
+<script src="/static/helpers.js"></script>
+
+
+<body>
+    <h1> Run Monitor </h1>
+    </br> {% for entry in databases %}
+    <div class="rounded">
+        <div class="panel-group">
+            <div class="panel panel-default">
+                <div class="panel-heading">
+                    <h4 class="panel-title">
+                        <a data-toggle="collapse" href="#collapse{{loop.index}}">{{type}}: {{entry["name"]}}</a>
+                        <div id="indicator" name="run_{{entry.id}}"></div>
+
+                    </h4>
+                </div>
+                <div id="collapse{{loop.index}}" class="panel-collapse collapse">
+                    <div class="panel-body">
+                        {{ get_command(entry)}}
+                    </div>
+                    <div class="panel-footer">
+                        <div id="commandBox">
+
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+    {% endfor %}
+
+    <form method=post>
+        <button type="submit" name="RunAll" value="RunAll"> Run All </button>
+    </form>
+</body>
+
+</html>
+
+{% endblock %}

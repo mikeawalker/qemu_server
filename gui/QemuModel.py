@@ -19,10 +19,11 @@ class Processor(db.Model):
 
     id = db.Column(db.String(256), primary_key=True )
     name = db.Column(db.String(256) , default="")
+    exe = db.Column(db.String(256) , default="")
     #processor   = db.Column(db.Enum(ProcessorType))
     memoryBytes = db.Column(db.Integer)
     machine     = db.Column(db.String(50))
-
+    used_by     = db.relationship( "QemuRun" , back_populates="processor"  )
 class QemuRun(db.Model):
     """Stores additional data to simulate a single processor with QEMU"""
     __tablename__ = 'qemus'
@@ -33,4 +34,6 @@ class QemuRun(db.Model):
     binary = db.Column(db.String(256))
     options = db.Column(db.String(1024), default = "" )
     archived = db.Column( db.Boolean , default = False )
-    #processor = db.relationship('System',backref=db.backref('qemus', lazy='dynamic', collection_class=list)    )
+    processor_id =  db.Column(db.String(256), db.ForeignKey('processors.id'))
+    processor = db.relationship("Processor", back_populates="used_by")
+

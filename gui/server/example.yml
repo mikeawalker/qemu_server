@@ -1,0 +1,5 @@
+processor:
+    - name: A
+    - dts: embedded/layout.dts
+    - elf: embedded/binary.bin
+    - memory: 8G

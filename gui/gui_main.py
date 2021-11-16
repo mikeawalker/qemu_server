@@ -20,6 +20,7 @@ app.config['SECRET_KEY'] = 'C2HWGVoMGfNTBsrYQg8EcMrdTimkZfAb'
 
 machine_dict = QEMU.generate_qemu_dict("qemu")
 
+qemu_object = QEMU.qemu()
 def getProcessors( database ):
     names = []
     for p in database.session.query(Processor).all():
@@ -57,17 +58,31 @@ class ControlForm(FlaskForm):
     add =  SubmitField("Add")
     control = SubmitField("Run")
 
+@app.context_processor
+def utility( ):
+    def get_command(entry ):
+        commands = QEMU.database_to_qemu( entry )
+        print( "Hey: {}".format(commands) )
+        out = " ".join( commands )
+        #out = " ".join(q.database_to_qemu( entry ))
+        #out = "hey im a command"
+        return out
+    return dict(get_command=get_command)
+
 @app.route('/_get_choices' , methods=["GET","POST"])
 def get_choices():
-    print("LULZ")
     exe = request.args.get('executable')
-    print("Selection: {}".format(exe))
 
     selection = exe
 
     machines = machine_dict[exe]
     print( "Exe is {}".format(exe))
     return jsonify( machines )
+@app.route('/_get_status', methods=["GET","POST"])
+def get_status():
+    out = qemu_object.get_status()
+    print( " number of statuseses {}".format( len(out)) )
+    return jsonify( out )
     
 @app.route('/qemu_config', methods=['GET', 'POST'])
 def qemu_config():
@@ -75,10 +90,20 @@ def qemu_config():
     return render_template('run.html')
 
 
-@app.route('/active', methods=['GET', 'POST'])
-def active():
+@app.route('/runs', methods=['GET', 'POST'])
+def runs():
 
-    return render_template('run.html')
+    # Find all the QEMU runs in the database
+    qemuRuns = db.session.query(QemuRun).all()
+    print("Runs")
+    if( request.method == "POST"):
+        print("POST")
+        if( "RunAll" in request.form ):
+            print("Running")
+            qemu_object.run(db)
+    print("Number of runs {}".format( len(qemuRuns)))
+    
+    return render_template('run.html', databases = qemuRuns , type="run")
 @app.route('/build' , methods=['GET', 'POST'])
 def build():
     form = NewProcessorForm()
@@ -94,6 +119,7 @@ def build():
         if (form.add.data == True):
             newProcessor = Processor()
             newProcessor.id = str(uuid.uuid4())
+            newProcessor.exe = str( form.executable.data)
             newProcessor.name = str(form.name.data)
             newProcessor.machine = str(form.machine.data)
             newProcessor.memoryBytes  = int(form.memory.data)
@@ -130,6 +156,12 @@ def index():
             newQemu.id=  str(uuid.uuid4())
             newQemu.binary = form.binary.data
             newQemu.options = form.additional.data
+            processorName = form.processor_config.data
+
+            # find the processor name we care about 
+            processorModel =  db.session.query(Processor).filter( Processor.name == processorName ).first()
+            newQemu.processor = processorModel 
+
             db.session.add( newQemu )
             db.session.commit()
             print("Commited to DB {}".format(db))
@@ -146,5 +178,7 @@ if __name__ == "__main__":
     with app.app_context():
         db.init_app(app=app)
         db.create_all()
+
+
         Bootstrap(app)
         app.run(debug=True)

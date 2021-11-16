@@ -84,3 +84,32 @@ $(function() {
     });
 
 });
+
+function updateIndicator(item) {
+
+    var id = item[0]
+    var status = item[1]
+    var message = "ID: " + id + " Status: " + status
+    console.log(message)
+    if (status == 1)
+        $('#indicator').css('background-color', 'green');
+    else
+        $('#indicator').css('background-color', 'red');
+};
+
+
+function updateAllStatus(data) {
+    console.log("updating" + data.length)
+    data.forEach(updateIndicator)
+};
+
+function updateStatus() {
+    url = window.location.pathname
+
+    if (url == "/runs") {
+
+        send = 0
+        $.getJSON("/_get_status", send, updateAllStatus);
+    };
+};
+setInterval(updateStatus, 1000);

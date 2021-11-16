@@ -1,0 +1,49 @@
+{% extends 'bootstrap/base.html' %}
+{% import "bootstrap/wtf.html" as wtf %}
+
+{% block styles %}
+{{ super() }}
+	<style>
+		body { background: #e8f1f9; }
+	</style>
+    <link rel="stylesheet" href='/static/main.css' />
+    {% endblock %}
+
+
+
+
+{% block title %}
+Side Bar
+{% endblock %}
+
+
+{% block content %}
+
+<span class="checkbox-container">
+    <input class="checkbox-trigger" type="checkbox"  />
+    <span class="menu-content">
+        <ul>
+          <li>Home</li>
+          <li>About</li>
+          <li>Contact</li>
+          <li>Blog</li>
+          <li>Social</li>
+        </ul>
+      <span class="hamburger-menu"></span>
+    </span>
+  </span>
+
+<div class="wrapper">
+    <div class="navbar">
+      <div class="first"></div>
+      <div class="second"></div>
+      <div class="third"></div>
+
+    </div>
+    <div class="grow"></div>
+    <p> Cobrai kai never dies </p>
+    </div>
+</div>
+
+{% endblock %}
+
